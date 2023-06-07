@@ -30,8 +30,8 @@
 </head>
 <body>
     <div class="container">
-        <h1>My GitHub Readme</h1>
-              <img src="test.jpg" alt="Natural Language AI" width="400" height="300">
+        <h1>Intro Vector search assistant to trigger actuators. 🚀🤖🤖</h1>
+              <img src="An_Introduction_to_NLP_in_AI-Thumbnail.webp" alt="Natural Language AI" width="400" height="300">
 
         <p>Welcome to my GitHub readme page! Here, you'll find information about me and my projects.</p>
         <p>Feel free to explore my repositories and contributions.</p>
