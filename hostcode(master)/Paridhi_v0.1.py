@@ -47,7 +47,7 @@ pattern_responses = {
         "Feeling good, thank you!"
     ],
     "What's your name?, tell me your name, what should I call you, who you are?": [
-        "I'm an AI management program deployed on your rover. Nice to meet you!",
+        "I'm an AI management dimmpy program deployed on your rover. Nice to meet you!",
         "You can call me Rover Assistant.",
         "I go by the name Rover AI."
     ],
@@ -56,7 +56,7 @@ pattern_responses = {
         "Did you hear about the mathematician who's afraid of negative numbers? He'll stop at nothing to avoid them!",
         "Why don't skeletons fight each other? They don't have the guts!"
     ],
-    "How's the weather?, temperature, hows the environment?, tell me the temperature and humidity": [
+    "How's the weather?, temperature, hows the environment?, tell me the temperature and humidity, level of humidity": [
         "weather.",
         "weather.",
         "weather"
@@ -137,7 +137,7 @@ def voice_assistant():
             print("Assistant:", response)
             speak(response)
         else:
-            speak("Assistant: I'm sorry, I didn't understand that. Could you please rephrase?")
+            print("please rephrase?")
 
 
 if __name__ == '__main__':
