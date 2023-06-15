@@ -5,29 +5,46 @@ import random
 import subprocess
 import time
 import azure.cognitiveservices.speech as speechsdk
-import logging
-import threading
+import snowboydecoder
 from azure.cognitiveservices.speech.audio import AudioOutputConfig
 import speech_recognition as sr
 
 
-def recognize_speech():
-    recognizer = sr.Recognizer()
-
-    with sr.Microphone() as source:
-        print("Speak something...")
+def recognizespeech():
+    print("Wake word detected")
+    # Once the wake word is detected, listen for speech
+    with mic as source:
         recognizer.adjust_for_ambient_noise(source)
-
         audio = recognizer.listen(source)
 
+    # Recognize the speech using Google Speech Recognition
     try:
         text = recognizer.recognize_google(audio)
+        print("You said: " + text)
         return text
     except sr.UnknownValueError:
         print("Sorry, I could not understand what you said.")
     except sr.RequestError as e:
         print("Error occurred during speech recognition: {0}".format(e))
     return ""
+
+# Initialize the Snowboy detector with the path to the wake word model file
+detector = snowboydecoder.HotwordDetector("resources/snowboy.umdl", sensitivity=0.5)
+
+# Initialize the speech recognizer
+recognizer = sr.Recognizer()
+
+# Set the microphone as the audio source
+mic = sr.Microphone()
+
+# Loop forever, listening for the wake word and then speech
+while True:
+    # Wait for the wake word to be detected
+    print("Listening for wake word...")
+    detector.start(detected_callback=recognizespeech(), sleep_time=0.03)
+
+    # Reset the Snowboy detector to listen for the wake word again
+    detector.terminate()
 
 
 def speak(text):
@@ -123,8 +140,9 @@ def find_similar_patterns(user_input):
 
 
 def voice_assistant():
+    global response
     while True:
-        user_input = recognize_speech()
+        user_input = recognizespeech()
         similar_patterns, max_similarity = find_similar_patterns(user_input)
         print("Similar patterns:", similar_patterns)
 
@@ -136,8 +154,18 @@ def voice_assistant():
             response = random.choice(responses)
             print("Assistant:", response)
             speak(response)
+
+        elif 'lights' in response:
+            speak("turning on the lights")
+            output = subprocess.check_output("python lights.py", shell=True)
+            output = output.decode("utf-8").strip()
+            print(output)
+        elif 'off' in response:
+            output = subprocess.check_output("python lights.py", shell=True)
+            output = output.decode("utf-8").strip()
+            print(output)
         else:
-            print("please rephrase?")
+            speak("Sorry, I didn't get that. Can you please repeat?")
 
 
 if __name__ == '__main__':

@@ -6,7 +6,7 @@
 # GPIO.setmode(GPIO.BOARD)
 
 import paramiko
-from text import ip, po, u,word
+from credSSH import ip, po, u,word
 
 def execute_remote_command(ssh, command):
     stdin, stdout, stderr = ssh.exec_command(command)
