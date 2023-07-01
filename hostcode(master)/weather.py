@@ -13,12 +13,12 @@ response = requests.get(url)
 
 if response.status_code == 200:
     data = response.json()
-
+    description = data["weather"][0]["description"]
     wind_speed = data["wind"]["speed"]
     air_pressure = data["main"]["pressure"]
     temperature = data["main"]["temp"]
     humidity = data["main"]["humidity"]
-
+    print(f"surrounding is: {description}")
     print(f"Wind speed: {wind_speed} meter per seconds")
     print(f"Air pressure: {air_pressure} hPascals")
     print(f"Temperature: {temperature} Kelvin")

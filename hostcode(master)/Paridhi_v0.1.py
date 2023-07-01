@@ -5,14 +5,19 @@ import random
 import subprocess
 import time
 import azure.cognitiveservices.speech as speechsdk
-import snowboydecoder
 from azure.cognitiveservices.speech.audio import AudioOutputConfig
 import speech_recognition as sr
+import keyboard
+
+def speak(text):
+    speech_config = speechsdk.SpeechConfig(subscription="855a5030c1f94d6096cda696fd25c31b", region="centralindia")
+    audio_config = AudioOutputConfig(use_default_speaker=True)
+    speech_config.speech_synthesis_voice_name = "en-US-SaraNeural"
+    synthesizer = speechsdk.SpeechSynthesizer(speech_config=speech_config, audio_config=audio_config)
+    synthesizer.speak_text_async(text)
 
 
 def recognizespeech():
-    print("Wake word detected")
-    # Once the wake word is detected, listen for speech
     with mic as source:
         recognizer.adjust_for_ambient_noise(source)
         audio = recognizer.listen(source)
@@ -20,16 +25,18 @@ def recognizespeech():
     # Recognize the speech using Google Speech Recognition
     try:
         text = recognizer.recognize_google(audio)
-        print("You said: " + text)
+        # print("You said: " + text)
+        if not text:
+            print("No speech detected. Please say it again clearly.")
         return text
+
     except sr.UnknownValueError:
-        print("Sorry, I could not understand what you said.")
+        print("Sorry, I could not understand what you said. Please say it again clearly.")
     except sr.RequestError as e:
         print("Error occurred during speech recognition: {0}".format(e))
+
     return ""
 
-# Initialize the Snowboy detector with the path to the wake word model file
-detector = snowboydecoder.HotwordDetector("resources/snowboy.umdl", sensitivity=0.5)
 
 # Initialize the speech recognizer
 recognizer = sr.Recognizer()
@@ -38,33 +45,26 @@ recognizer = sr.Recognizer()
 mic = sr.Microphone()
 
 # Loop forever, listening for the wake word and then speech
-while True:
-    # Wait for the wake word to be detected
-    print("Listening for wake word...")
-    detector.start(detected_callback=recognizespeech(), sleep_time=0.03)
+# while True:
+#     print("Listening for the wake word...")
+#     text = recognizespeech()
+#
+#     if "robot" in text.lower() :
+#         break
 
-    # Reset the Snowboy detector to listen for the wake word again
-    detector.terminate()
 
-
-def speak(text):
-    speech_config=speechsdk.SpeechConfig(subscription="855a5030c1f94d6096cda696fd25c31b", region="centralindia")
-    audio_config = AudioOutputConfig(use_default_speaker=True)
-    speech_config.speech_synthesis_voice_name="en-US-SaraNeural"
-    synthesizer = speechsdk.SpeechSynthesizer(speech_config=speech_config, audio_config=audio_config)
-    synthesizer.speak_text_async(text)
 pattern_responses = {
-
     "Turn on lights, turn on the lights, can you turn on the light?, switch onn the light, switch on the lights, "
-    "switch on light":[
-        "lights"],
+    "switch on light": [
+        "lights"
+    ],
     "How are you?, Are you fine?,": [
         "I'm doing great, thanks for asking!",
         "I'm fine, how about you?",
         "Feeling good, thank you!"
     ],
     "What's your name?, tell me your name, what should I call you, who you are?": [
-        "I'm an AI management dimmpy program deployed on your rover. Nice to meet you!",
+        "I'm an AI management program deployed on your rover. Nice to meet you!",
         "You can call me Rover Assistant.",
         "I go by the name Rover AI."
     ],
@@ -140,32 +140,35 @@ def find_similar_patterns(user_input):
 
 
 def voice_assistant():
-    global response
     while True:
-        user_input = recognizespeech()
-        similar_patterns, max_similarity = find_similar_patterns(user_input)
-        print("Similar patterns:", similar_patterns)
+        print("say robot")
+        text = recognizespeech()
+        if "robot" in text.lower() or keyboard.is_pressed("space") or "robo" in text.lower():
+            print("Listening")
+            user_input = recognizespeech()
+            similar_patterns, max_similarity = find_similar_patterns(user_input)
+            print("Similar patterns:", similar_patterns)
 
-        if max_similarity > 0.5:
-            responses = []
-            for pattern in similar_patterns:
-                responses.extend(pattern_responses[pattern])
+            if max_similarity > 0.5:
+                responses = []
+                for pattern in similar_patterns:
+                    responses.extend(pattern_responses[pattern])
 
-            response = random.choice(responses)
-            print("Assistant:", response)
-            speak(response)
+                response = random.choice(responses)
+                print("Assistant:", response)
+                speak(response)
 
-        elif 'lights' in response:
-            speak("turning on the lights")
-            output = subprocess.check_output("python lights.py", shell=True)
-            output = output.decode("utf-8").strip()
-            print(output)
-        elif 'off' in response:
-            output = subprocess.check_output("python lights.py", shell=True)
-            output = output.decode("utf-8").strip()
-            print(output)
-        else:
-            speak("Sorry, I didn't get that. Can you please repeat?")
+                if 'lights' in response:
+                    speak("turning on the lights")
+                    output = subprocess.check_output("python lights.py", shell=True)
+                    output = output.decode("utf-8").strip()
+                    print(output)
+                elif 'off' in response:
+                    output = subprocess.check_output("python lights.py", shell=True)
+                    output = output.decode("utf-8").strip()
+                    print(output)
+            else:
+                speak("Sorry, I didn't get that. Can you please repeat?")
 
 
 if __name__ == '__main__':
