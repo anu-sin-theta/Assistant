@@ -57,6 +57,7 @@ pattern_responses = {
         "logging"
     ],
     "show me the logs, show me the log": ["open logs"],
+    "How's the weather, current weather, weather": ["weather"],
     "What is current time, what's the time, what's the time now": ["time"],
     "What is the date today, what's the date today, what's the date": ["date"],
     "What is the temperature, what's the temperature, what's the temperature now": ["temperature"],
@@ -67,5 +68,8 @@ pattern_responses = {
     "tell me the current location, rovers current location, what's the current location": ["location"],
     "who programmed you, who created you, who made you, who is your creator": ["Anubhav is my creator","My creator is Anubhav","Anubhav, he worked hard to make me","you know him, he's Anubhav"],
     "what's the name of your team, what's your team name, what's the name of your team": ["Team Decrptors","Decryptors from CSED","Team Decrptors from G.L.A University, a team of 4 members of CSED"],
-
-}
+    "what's your team's website, what's your team website, what's the website of your team": ["decryptors.pages.dev","it's decryptors.pages.dev","my team's website is decryptors.pages.dev"],
+    "hi,hello,hey": ["hi there","hello","hi master", "hi, how are you?"],
+    "set target location to gla university mathura": ["setting target location to GLA university now, Coordinates- 27.6057° North and 77.5933° East"],
+    "check for rover status, check rover status, check rover's status": ["transmitting ICMP packets rover not connected"],
+    "what is poision composition, what is poision, what is the composition of poision": ["poision is a substance that is capable of causing the illness or death of a living organism when introduced or absorbed."],}
