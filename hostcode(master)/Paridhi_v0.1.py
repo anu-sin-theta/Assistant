@@ -119,9 +119,9 @@ class SpeechRecognitionThread(QThread):
                     response = random.choice(responses)
                     print("Assistant:", response)
                     speak(response)
+                    time.sleep(1.1)
 
                     if 'weather' in response:
-                        speak("Fetching weather data")
                         output = subprocess.check_output("python weather.py", shell=True)
                         output = output.decode("utf-8").strip()
                         print(output)
@@ -130,53 +130,69 @@ class SpeechRecognitionThread(QThread):
                         output = subprocess.check_output("python lightsoff.py", shell=True)
                         output = output.decode("utf-8").strip()
                         print(output)
+                        speak(output)
+
                     elif 'temparature' in response:
                         output = subprocess.check_output("python temparature.py", shell=True)
                         output = output.decode("utf-8").strip()
                         print(output)
+                        speak(output)
+
                     elif 'humidity' in response:
                         output = subprocess.check_output("python humidity.py", shell=True)
                         output = output.decode("utf-8").strip()
                         print(output)
+                        speak(output)
+
                     elif 'resource' in response:
                         output = subprocess.check_output("python resource.py", shell=True)
                         output = output.decode("utf-8").strip()
                         print(output)
+                        speak(output)
+
                     elif 'battery' in response:
                         output = subprocess.check_output("python battery.py", shell=True)
                         output = output.decode("utf-8").strip()
                         print(output)
+                        speak(output)
+
                     elif 'location' in response:
                         output = subprocess.check_output("python location.py", shell=True)
                         output = output.decode("utf-8").strip()
                         print(output)
+                        speak(output)
+
                     elif 'pressure' in response:
                         output = subprocess.check_output("python pressure.py", shell=True)
                         output = output.decode("utf-8").strip()
                         print(output)
+                        speak(output)
+
                     elif 'time' in response:
                         output = subprocess.check_output("python strange.py", shell=True)
                         output = output.decode("utf-8").strip()
                         print(output)
+                        speak(output)
+
                     elif 'logging' in response:
                         log_thread.start()
                         speak("Logging started")
-                    elif "weather logs" in text:
+                    elif "open logs" in response:
                         speak("Fetching logs.")
                         subprocess.check_output("weather.log", shell=True)
                         time.sleep(2)
                         speak("Here are the recent logs for environmental data")
-                    elif "resource logs" in text:
+                    elif "resource logs" in response:
                         speak("Fetching")
                         subprocess.check_output("resource.log", shell=True)
                         time.sleep(2)
                         speak("Here are the recent logs for system data!")
-                    elif "battery logs" in text:
+                    elif "battery logs" in response:
                         speak("Fetching battery logs...")
                         subprocess.check_output("battery.log", shell=True)
                         time.sleep(2)
                         speak("Here are the recent logs for environmental data")
-                    elif "location logs" in text:
+                    elif "location logs" in response:
                         speak("Fetching resource logs...")
                         subprocess.check_output("location.log", shell=True)
                         time.sleep(2)
@@ -257,18 +273,86 @@ class ChatWindow(QMainWindow):
                 response = random.choice(responses)
                 self.conversation_text.append("Rover: " + response)
                 speak(response)
+                time.sleep(1.1)
 
-                if 'lights' in response:
-                    speak("turning on the lights")
-                    output = subprocess.check_output("python lights.py", shell=True)
+                if 'weather' in response:
+                    output = subprocess.check_output("python weather.py", shell=True)
                     output = output.decode("utf-8").strip()
                     print(output)
-                elif 'off' in response:
-                    output = subprocess.check_output("python lights.py", shell=True)
+                    speak(output)
+                elif 'lights off' in response:
+                    output = subprocess.check_output("python lightsoff.py", shell=True)
                     output = output.decode("utf-8").strip()
                     print(output)
+                    speak(output)
+
+                elif 'temparature' in response:
+                    output = subprocess.check_output("python temparature.py", shell=True)
+                    output = output.decode("utf-8").strip()
+                    print(output)
+                    speak(output)
+
+                elif 'humidity' in response:
+                    output = subprocess.check_output("python humidity.py", shell=True)
+                    output = output.decode("utf-8").strip()
+                    print(output)
+                    speak(output)
+
+                elif 'resource' in response:
+                    output = subprocess.check_output("python resource.py", shell=True)
+                    output = output.decode("utf-8").strip()
+                    print(output)
+                    speak(output)
+
+                elif 'battery' in response:
+                    output = subprocess.check_output("python battery.py", shell=True)
+                    output = output.decode("utf-8").strip()
+                    print(output)
+                    speak(output)
+
+                elif 'location' in response:
+                    output = subprocess.check_output("python location.py", shell=True)
+                    output = output.decode("utf-8").strip()
+                    print(output)
+                    speak(output)
+
+                elif 'pressure' in response:
+                    output = subprocess.check_output("python pressure.py", shell=True)
+                    output = output.decode("utf-8").strip()
+                    print(output)
+                    speak(output)
+
+                elif 'time' in response:
+                    output = subprocess.check_output("python strange.py", shell=True)
+                    output = output.decode("utf-8").strip()
+                    print(output)
+                    speak(output)
+
+                elif 'logging' in response:
+                    log_thread.start()
+                    speak("Logging started")
+                elif "open logs" in response:
+                    speak("Fetching logs.")
+                    subprocess.check_output("weather.log", shell=True)
+                    time.sleep(2)
+                    speak("Here are the recent logs for environmental data")
+                elif "resource logs" in response:
+                    speak("Fetching")
+                    subprocess.check_output("resource.log", shell=True)
+                    time.sleep(2)
+                    speak("Here are the recent logs for system data!")
+                elif "battery logs" in response:
+                    speak("Fetching battery logs...")
+                    subprocess.check_output("battery.log", shell=True)
+                    time.sleep(2)
+                    speak("Here are the recent logs for environmental data")
+                elif "location logs" in response:
+                    speak("Fetching resource logs...")
+                    subprocess.check_output("location.log", shell=True)
+                    time.sleep(2)
+                    speak("Here are the recent logs for system data!")
             else:
-                speak("Sorry, I didn't get that. Can you please repeat?")
+                speak("Can you please repeat?")
     def set_background_gradient(self):
         pal = QPalette()
         gradient = QLinearGradient(0, 0, 0, 400)
