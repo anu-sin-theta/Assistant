@@ -42,7 +42,7 @@ log_thread = threading.Thread(target=get_logs)
 def speak(text):
     speech_config = speechsdk.SpeechConfig(subscription="855a5030c1f94d6096cda696fd25c31b", region="centralindia")
     audio_config = AudioOutputConfig(use_default_speaker=True)
-    speech_config.speech_synthesis_voice_name = "en-US-SaraNeural"
+    speech_config.speech_synthesis_voice_name = "en-US-AriaNeural"
     synthesizer = speechsdk.SpeechSynthesizer(speech_config=speech_config, audio_config=audio_config)
     synthesizer.speak_text_async(text)
 
@@ -264,7 +264,8 @@ class ChatWindow(QMainWindow):
         else:
             # Get the assistant's response to the user input
             similar_patterns, max_similarity = find_similar_patterns(user_input)
-
+            print("Similar patterns:", similar_patterns)
+            print("Max similarity:", max_similarity)
             if max_similarity > 0.5:
                 responses = []
                 for pattern in similar_patterns:
@@ -278,54 +279,54 @@ class ChatWindow(QMainWindow):
                 if 'weather' in response:
                     output = subprocess.check_output("python weather.py", shell=True)
                     output = output.decode("utf-8").strip()
-                    print(output)
+                    self.conversation_text.append("controller: " + output)
                     speak(output)
-                elif 'lights off' in response:
+                elif 'lights' in response:
                     output = subprocess.check_output("python lightsoff.py", shell=True)
                     output = output.decode("utf-8").strip()
-                    print(output)
+                    self.conversation_text.append("controller: " + output)
                     speak(output)
 
                 elif 'temparature' in response:
                     output = subprocess.check_output("python temparature.py", shell=True)
                     output = output.decode("utf-8").strip()
-                    print(output)
+                    self.conversation_text.append("controller: " + output)
                     speak(output)
 
                 elif 'humidity' in response:
                     output = subprocess.check_output("python humidity.py", shell=True)
                     output = output.decode("utf-8").strip()
-                    print(output)
+                    self.conversation_text.append("controller: " + output)
                     speak(output)
 
                 elif 'resource' in response:
                     output = subprocess.check_output("python resource.py", shell=True)
                     output = output.decode("utf-8").strip()
-                    print(output)
+                    self.conversation_text.append("controller: " + output)
                     speak(output)
 
                 elif 'battery' in response:
                     output = subprocess.check_output("python battery.py", shell=True)
                     output = output.decode("utf-8").strip()
-                    print(output)
+                    self.conversation_text.append("controller: " + output)
                     speak(output)
 
                 elif 'location' in response:
                     output = subprocess.check_output("python location.py", shell=True)
                     output = output.decode("utf-8").strip()
-                    print(output)
+                    self.conversation_text.append("controller: " + output)
                     speak(output)
 
                 elif 'pressure' in response:
                     output = subprocess.check_output("python pressure.py", shell=True)
                     output = output.decode("utf-8").strip()
-                    print(output)
+                    self.conversation_text.append("controller: " + output)
                     speak(output)
 
                 elif 'time' in response:
                     output = subprocess.check_output("python strange.py", shell=True)
                     output = output.decode("utf-8").strip()
-                    print(output)
+                    self.conversation_text.append("controller: " + output)
                     speak(output)
 
                 elif 'logging' in response:
